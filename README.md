@@ -1,7 +1,12 @@
 # 📊 Telco Customer Churn — ML Optimization
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Libraries](https://img.shields.io/badge/Libraries-Pandas%20%7C%20Scikit--Learn%20%7C%20Seaborn-green)
+![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-150458?logo=pandas)
+![NumPy](https://img.shields.io/badge/NumPy-1.24%2B-013243?logo=numpy)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-3.7%2B-11557c)
+![Seaborn](https://img.shields.io/badge/Seaborn-0.12%2B-4c72b0)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3%2B-F7931E?logo=scikit-learn)
+![Jupyter](https://img.shields.io/badge/Jupyter-1.0%2B-F37626?logo=jupyter)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
 ## 📖 Abstract
@@ -13,14 +18,43 @@ La metrica di riferimento è il **Recall** — minimizzare i falsi negativi (chu
 
 ---
 
-## 🎯 Motivazione e Obiettivi
+## 📦 Dataset
 
-Il progetto precedente aveva identificato il 26.6% di clienti churner e costruito un modello baseline con Logistic Regression. Il limite principale era un Recall del 57%: quasi metà dei clienti a rischio non veniva rilevata.
+**IBM Telco Customer Churn** — disponibile su [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
 
-**L'obiettivo di questo progetto è:**
-1. **Ottimizzare** i modelli esistenti tramite GridSearchCV e K-Fold Cross-Validation
-2. **Espandere** il set di modelli con l'introduzione di una rete neurale MLP
-3. **Valutare** i risultati con un set completo di metriche (Recall, AUC-ROC, AUC-PR, MCC, Log-Loss)
+| Proprietà | Valore |
+|---|---|
+| Righe (clienti) | 7.043 |
+| Colonne (feature) | 21 |
+| Variabile target | `Churn` (Yes / No) |
+| Sbilanciamento classi | ~26.6% Churn, ~73.4% No Churn |
+
+Le feature coprono: dati demografici (genere, anzianità), servizi attivati (telefono, internet, streaming), tipo di contratto, metodo di pagamento, addebiti mensili e totali.
+
+---
+
+## 🔄 Progetto Precedente — Baseline
+
+Il corso di *Laboratorio di Big Data* aveva prodotto una prima analisi end-to-end sullo stesso dataset:
+
+| Fase | Tecnica | Risultato |
+|---|---|---|
+| Data Cleaning | Gestione valori mancanti, conversione `TotalCharges` | 0 valori nulli |
+| EDA | Distribuzione Churn, correlazioni contratto/tenure/spesa | Contratto Month-to-Month = principale fattore di rischio |
+| Clustering | K-Means (k=3), Elbow Method | Cluster critico: "Nuovi Alto-Spendenti" con churn >50% |
+| Outlier Detection | IQR / Box-plot (univariato) | Outlier rilevati ma non rimossi |
+| Classificazione | Logistic Regression (train/test split semplice) | Accuracy ~79%, **Recall ~57%** |
+
+**Limite identificato:** con Recall del 57%, quasi metà dei clienti a rischio non veniva rilevata — il costo di acquisizione di un cliente perso supera quello di un falso allarme.
+
+---
+
+## 🎯 Obiettivi di questo Progetto
+
+1. **Ottimizzare** i modelli tramite `GridSearchCV` e K-Fold Cross-Validation
+2. **Espandere** il set di modelli con Decision Tree e rete neurale MLP
+3. **Migliorare il Recall** come priorità di business
+4. **Valutare** con un set completo di metriche: Recall, AUC-ROC, AUC-PR, MCC, Log-Loss
 
 ---
 
@@ -44,13 +78,13 @@ Il notebook segue la struttura richiesta per l'esame:
 
 | Sezione | Contenuto |
 |---|---|
-| **0** | Punto di partenza — tabella baseline dal progetto precedente |
-| **1** | Data Cleaning e EDA (analisi target, fedeltà, spesa, encoding, scaling) |
-| **2** | Outlier Detection — IQR/Box-plot + Isolation Forest multivariato |
-| **3** | Scelta dei modelli — ipotesi e motivazioni |
-| **4** | Validazione e Ottimizzazione — baseline LR, K-Fold CV, GridSearch LR e Decision Tree |
+| **0** | Punto di partenza — tabella riepilogativa dei risultati del progetto precedente |
+| **1** | Data Cleaning e EDA — analisi target, fedeltà, spesa, encoding, scaling |
+| **2** | Outlier Detection — IQR/Box-plot (univariato) + Isolation Forest (multivariato) |
+| **3** | Scelta dei modelli — ipotesi e motivazioni per ciascun algoritmo |
+| **4** | Validazione e Ottimizzazione — baseline LR, K-Fold CV, GridSearch su LR e Decision Tree |
 | **5** | Rete Neurale MLP — baseline, loss curve, GridSearch |
-| **6** | Confronto finale — tabella metriche, grafici comparativi, curve ROC e Precision-Recall |
+| **6** | Confronto finale — tabella metriche completa, grafici comparativi, curve ROC e Precision-Recall |
 | **7** | Conclusioni, raccomandazioni strategiche e sviluppi futuri |
 
 ---
@@ -58,11 +92,16 @@ Il notebook segue la struttura richiesta per l'esame:
 ## 🔬 Metodologia
 
 ### Outlier Detection (Sezione 2)
-- **IQR / Box-plot** — rilevamento univariato sulle variabili numeriche continue
-- **Isolation Forest** — rilevamento multivariato (anomalie contestuali); gli outlier rilevati vengono mantenuti perché rappresentano comportamenti reali
+- **IQR / Box-plot** — rilevamento univariato su `tenure`, `MonthlyCharges`, `TotalCharges`
+- **Isolation Forest** — rilevamento multivariato (anomalie contestuali); gli outlier individuati vengono mantenuti perché rappresentano comportamenti reali di clienti, non errori di misurazione
 
-### Ottimizzazione Iperparametri (Sezione 4–5)
-- **K-Fold Cross-Validation** (k=5) — stima robusta delle performance, riduce la varianza rispetto al singolo split
+### Preprocessing (Sezione 1.5)
+- **Label Encoding** per variabili binarie (Yes/No, Male/Female)
+- **One-Hot Encoding** per variabili multi-categoria (Contract, PaymentMethod, ecc.)
+- **StandardScaler** — obbligatorio per Logistic Regression e MLP, entrambi sensibili alla scala perché ottimizzati tramite gradiente
+
+### Ottimizzazione Iperparametri (Sezioni 4–5)
+- **K-Fold Cross-Validation** (k=5, shuffle=True) — stima robusta; riduce la varianza rispetto al singolo split
 - **GridSearchCV** su tutti e tre i modelli, `scoring='recall'`
 
 | Modello | Iperparametri ottimizzati |
@@ -83,7 +122,8 @@ Il notebook segue la struttura richiesta per l'esame:
 | MLP Baseline | 76.2% | 51.1% | 53.3% | 0.808 |
 | **MLP Ottimizzato (Grid Search)** | **86.7%** | **71.7%** | **74.0%** | **0.934** |
 
-**Miglioramento Recall:** +15 punti percentuali rispetto alla baseline (56.7% → 71.7%)
+**Miglioramento Recall:** +15 punti percentuali rispetto alla baseline (56.7% → 71.7%)  
+**Miglioramento AUC-ROC:** da 0.842 a 0.934 (+0.092)
 
 ---
 
@@ -119,10 +159,15 @@ Il notebook segue la struttura richiesta per l'esame:
 
 ## 🛠️ Tecnologie Utilizzate
 
-- **Python 3.8+**
-- **Pandas & NumPy** — manipolazione dati
-- **Matplotlib & Seaborn** — visualizzazione
-- **Scikit-Learn** — preprocessing, modelli ML, GridSearchCV, K-Fold CV, metriche
+| Libreria | Versione minima | Utilizzo |
+|---|---|---|
+| Python | 3.8+ | Linguaggio principale |
+| Pandas | 2.0+ | Manipolazione e analisi dati |
+| NumPy | 1.24+ | Operazioni numeriche |
+| Matplotlib | 3.7+ | Visualizzazione dati |
+| Seaborn | 0.12+ | Visualizzazione statistica |
+| Scikit-Learn | 1.3+ | ML, GridSearchCV, K-Fold, metriche |
+| Jupyter / Notebook | 1.0+ / 7.0+ | Ambiente di sviluppo interattivo |
 
 ---
 
