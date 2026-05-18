@@ -1,4 +1,4 @@
-# 📊 Telco Customer Churn — ML Optimization
+ # 📊 Telco Customer Churn — ML Optimization
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-150458?logo=pandas)
@@ -78,11 +78,13 @@ Il notebook segue la struttura richiesta per l'esame:
 
 | Sezione | Contenuto |
 |---|---|
+| **Introduzione** | Problema, tipo di task, obiettivo, interesse pratico |
+| **Descrizione Dataset** | Origine, dimensione, tabella variabili per categoria, note sbilanciamento |
 | **0** | Punto di partenza — tabella riepilogativa dei risultati del progetto precedente |
-| **1** | Data Cleaning e EDA — analisi target, fedeltà, spesa, encoding, scaling |
+| **1** | Data Cleaning e EDA — analisi target, fedeltà, spesa; §1.5 encoding/scaling; §1.6 correlazioni |
 | **2** | Outlier Detection — IQR/Box-plot (univariato) + Isolation Forest (multivariato) |
 | **3** | Scelta dei modelli — ipotesi e motivazioni per ciascun algoritmo |
-| **4** | Validazione e Ottimizzazione — baseline LR, K-Fold CV, GridSearch su LR e Decision Tree |
+| **4** | Validazione e Ottimizzazione — baseline LR, K-Fold CV, GridSearch su LR, Decision Tree, KNN |
 | **5** | Rete Neurale MLP — baseline, loss curve, GridSearch |
 | **6** | Confronto finale — tabella metriche completa, grafici comparativi, curve ROC e Precision-Recall |
 | **7** | Conclusioni, raccomandazioni strategiche e sviluppi futuri |
@@ -129,31 +131,72 @@ Il notebook segue la struttura richiesta per l'esame:
 
 ## 🚀 Installazione e Utilizzo
 
-1. **Clona la repository:**
-   ```bash
-   git clone https://github.com/diegoandruccioli/telco-churn-ml-optimization.git
-   cd telco-churn-ml-optimization
-   ```
+### Prerequisiti
 
-2. **Crea un ambiente virtuale (consigliato):**
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # Mac/Linux
-   source venv/bin/activate
-   ```
+- **Python 3.8+** — verificare con `python --version`
+- **pip** — incluso nelle versioni moderne di Python
 
-3. **Installa le dipendenze:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1. Clona la repository
 
-4. **Avvia Jupyter Notebook:**
-   ```bash
-   jupyter notebook
-   ```
-   Apri `notebooks/churn_optimization.ipynb` ed esegui le celle sequenzialmente.
+```bash
+git clone https://github.com/diegoandruccioli/telco-churn-ml-optimization.git
+cd telco-churn-ml-optimization
+```
+
+### 2. Scarica il dataset
+
+Il dataset non è incluso nella repository per ragioni di dimensione.
+
+1. Vai su [Kaggle — Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+2. Scarica `WA_Fn-UseC_-Telco-Customer-Churn.csv`
+3. Posizionalo in `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`
+
+### 3. Crea un ambiente virtuale (consigliato)
+
+```bash
+python -m venv venv
+```
+
+Attiva l'ambiente:
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# Mac / Linux
+source venv/bin/activate
+```
+
+### 4. Installa le dipendenze
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Avvia il notebook
+
+**Opzione A — Jupyter Notebook (browser):**
+```bash
+jupyter notebook
+```
+Si apre il browser. Naviga in `notebooks/` e clicca su `churn_optimization.ipynb`.
+
+**Opzione B — JupyterLab:**
+```bash
+pip install jupyterlab
+jupyter lab
+```
+
+**Opzione C — VS Code:**
+Installa l'estensione *Jupyter* da Microsoft, poi apri direttamente `notebooks/churn_optimization.ipynb`.
+
+### 6. Esegui il notebook
+
+Una volta aperto il notebook, esegui tutte le celle in sequenza:
+- **Kernel → Restart & Run All** (Jupyter Notebook)
+- **Run All** (JupyterLab / VS Code)
+
+> **Nota:** la sezione §5.3 Grid Search MLP richiede ~5–10 minuti su hardware standard (80 combinazioni × 5-fold CV). Le `ConvergenceWarning` di sklearn durante questa sezione sono attese e già documentate nel notebook — non indicano errori.
 
 ---
 
