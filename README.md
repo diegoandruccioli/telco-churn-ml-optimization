@@ -104,28 +104,33 @@ Il notebook segue la struttura richiesta per l'esame:
 
 ### Ottimizzazione Iperparametri (Sezioni 4–5)
 - **K-Fold Cross-Validation** (k=5, shuffle=True) — stima robusta; riduce la varianza rispetto al singolo split
-- **GridSearchCV** su tutti e tre i modelli, `scoring='recall'`
+- **GridSearchCV** su tutti e quattro i modelli, `scoring='recall'`
 
 | Modello | Iperparametri ottimizzati |
 |---|---|
 | Logistic Regression | `C`, `solver`, `max_iter` |
 | Decision Tree | `max_depth`, `min_samples_split`, `criterion` |
+| KNN | `n_neighbors`, `weights`, `metric` |
 | MLP | `hidden_layer_sizes`, `activation`, `learning_rate_init` |
 
 ---
 
 ## 🔑 Risultati
 
+> Tutte le metriche valutate a soglia ottimizzata **0.35** (ottimale per Recall su questo dominio di business).
+
 | Modello | Accuracy | Recall | F1-Score | AUC-ROC |
 |---|---|---|---|---|
-| LR Baseline (vecchio progetto) | 80.7% | 56.7% | 60.9% | 0.842 |
-| LR Ottimizzata (Grid Search) | 80.1% | 56.4% | 60.1% | 0.840 |
-| Decision Tree (Grid Search) | 75.1% | 59.4% | 55.8% | 0.789 |
-| MLP Baseline | 76.2% | 51.1% | 53.3% | 0.808 |
-| **MLP Ottimizzato (Grid Search)** | **86.7%** | **71.7%** | **74.0%** | **0.934** |
+| LR Baseline (vecchio progetto) | 76.5% | 70.9% | 61.6% | 0.842 |
+| LR Ottimizzata (Grid Search) | 75.8% | 72.5% | 61.4% | 0.837 |
+| Decision Tree (Grid Search) | 75.1% | 59.4% | 55.8% | 0.787 |
+| KNN Baseline | 71.2% | 71.1% | 56.7% | 0.771 |
+| **KNN Ottimizzato (Grid Search)** | **73.2%** | **73.0%** | **59.2%** | **0.815** |
+| MLP Baseline | 75.1% | 62.3% | 57.0% | 0.803 |
+| MLP Ottimizzato (Grid Search) | 74.4% | 65.2% | 57.5% | 0.809 |
 
-**Miglioramento Recall:** +15 punti percentuali rispetto alla baseline (56.7% → 71.7%)  
-**Miglioramento AUC-ROC:** da 0.842 a 0.934 (+0.092)
+**Miglioramento Recall:** +16.3 punti percentuali rispetto alla baseline del vecchio progetto (~57% a soglia 0.50 → 73.0% a soglia 0.35) — KNN Ottimizzato  
+**MLP:** Grid Search ha selezionato `alpha=0.01` (+2.9 pp Recall rispetto a MLP Baseline, +0.006 AUC-ROC).
 
 ---
 
@@ -196,7 +201,7 @@ Una volta aperto il notebook, esegui tutte le celle in sequenza:
 - **Kernel → Restart & Run All** (Jupyter Notebook)
 - **Run All** (JupyterLab / VS Code)
 
-> **Nota:** la sezione §5.3 Grid Search MLP richiede ~5–10 minuti su hardware standard (80 combinazioni × 5-fold CV). Le `ConvergenceWarning` di sklearn durante questa sezione sono attese e già documentate nel notebook — non indicano errori.
+> **Nota:** la sezione §5.3 Grid Search MLP richiede ~15–25 minuti su hardware standard (48 combinazioni × 5-fold CV = 240 fit). Le `ConvergenceWarning` di sklearn durante questa sezione sono attese e già documentate nel notebook — non indicano errori.
 
 ---
 
