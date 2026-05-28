@@ -86,7 +86,7 @@ Il notebook segue la struttura richiesta per l'esame:
 | **3** | Scelta dei modelli — ipotesi e motivazioni per ciascun algoritmo |
 | **4** | Validazione e Ottimizzazione — baseline LR, K-Fold CV, GridSearch su LR, Decision Tree, KNN |
 | **5** | Rete Neurale MLP — baseline, loss curve, GridSearch |
-| **6** | Confronto finale — tabella metriche completa, grafici comparativi, curve ROC e Precision-Recall |
+| **6** | Confronto finale — tabella metriche completa, grafici comparativi, curve ROC e Precision-Recall; §6.4 analisi della soglia di classificazione (0.20–0.60) |
 | **7** | Conclusioni, raccomandazioni strategiche e sviluppi futuri |
 
 ---
@@ -111,7 +111,7 @@ Il notebook segue la struttura richiesta per l'esame:
 | Logistic Regression | `C`, `solver`, `max_iter` |
 | Decision Tree | `max_depth`, `min_samples_split`, `criterion` |
 | KNN | `n_neighbors`, `weights`, `metric` |
-| MLP | `hidden_layer_sizes`, `activation`, `learning_rate_init` |
+| MLP | `hidden_layer_sizes`, `activation`, `learning_rate_init`, `alpha`, `max_iter` |
 
 ---
 
@@ -148,13 +148,11 @@ git clone https://github.com/diegoandruccioli/telco-churn-ml-optimization.git
 cd telco-churn-ml-optimization
 ```
 
-### 2. Scarica il dataset
+### 2. Dataset
 
-Il dataset non è incluso nella repository per ragioni di dimensione.
+Il dataset è già incluso nella repository in `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`. Nessun download necessario.
 
-1. Vai su [Kaggle — Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
-2. Scarica `WA_Fn-UseC_-Telco-Customer-Churn.csv`
-3. Posizionalo in `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`
+> Fonte originale: [Kaggle — Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
 ### 3. Crea un ambiente virtuale (consigliato)
 
