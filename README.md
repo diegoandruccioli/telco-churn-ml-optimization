@@ -123,14 +123,14 @@ Il notebook segue la struttura richiesta per l'esame:
 |---|---|---|---|---|
 | LR Baseline (vecchio progetto) | 76.5% | 70.9% | 61.6% | 0.842 |
 | LR Ottimizzata (Grid Search) | 75.8% | 72.5% | 61.4% | 0.837 |
-| Decision Tree (Grid Search) | 75.1% | 59.4% | 55.8% | 0.787 |
+| Decision Tree (Grid Search) | 78.8% | 63.4% | 61.3% | 0.827 |
 | KNN Baseline | 71.2% | 71.1% | 56.7% | 0.771 |
-| **KNN Ottimizzato (Grid Search)** | **73.2%** | **73.0%** | **59.2%** | **0.815** |
+| **KNN Ottimizzato (Grid Search)** | **73.0%** | **75.7%** | **59.8%** | **0.809** |
 | MLP Baseline | 75.1% | 62.3% | 57.0% | 0.803 |
-| MLP Ottimizzato (Grid Search) | 74.4% | 65.2% | 57.5% | 0.809 |
+| MLP Ottimizzato (Grid Search) | 75.1% | 62.3% | 57.0% | 0.803 |
 
-**Miglioramento Recall:** +16.3 punti percentuali rispetto alla baseline del vecchio progetto (~57% a soglia 0.50 → 73.0% a soglia 0.35) — KNN Ottimizzato  
-**MLP:** Grid Search ha selezionato `alpha=0.01` (+2.9 pp Recall rispetto a MLP Baseline, +0.006 AUC-ROC).
+**Miglioramento Recall:** +18.7 punti percentuali rispetto alla baseline del vecchio progetto (~57% a soglia 0.50 → 75.7% a soglia 0.35) — KNN Ottimizzato  
+**MLP:** Grid Search ha confermato `alpha=0.0001` (default) — MLP Ottimizzato identico alla baseline (Recall 62.3%, AUC-ROC 0.803).
 
 ---
 
